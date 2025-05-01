@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Chatbot UI</title>
 
-  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-  
-  <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
   <style>
@@ -16,40 +13,43 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Arial', sans-serif;
+      font-family: 'Roboto', sans-serif;
     }
 
     body {
-      background: linear-gradient(to bottom left, #ff0000 0%, #ff66ff 94%);
+      background: linear-gradient(to bottom left, #ff0033 0%, #cc66ff 100%);
       color: white;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
+      padding: 20px;
     }
 
     .chat-container {
       width: 100%;
       max-width: 600px;
-      height: 80vh;
+      height: 90vh;
       display: flex;
       flex-direction: column;
-      background: transparent;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
       border-radius: 15px;
       overflow: hidden;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
     }
 
     .chat-header {
       padding: 15px;
       text-align: center;
-      background: transparent;
+      background-color: rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .logo {
       height: 50px;
       width: auto;
-      margin: 0 auto;
     }
 
     .chat-box {
@@ -68,63 +68,58 @@
 
     .message {
       max-width: 75%;
-      padding: 12px;
+      padding: 12px 16px;
       border-radius: 10px;
-      line-height: 1.4;
-      display: flex;
-      align-items: center;
+      line-height: 1.5;
       font-size: 15px;
       word-wrap: break-word;
     }
 
     .user {
-      background: #0a84ff;
+      background: #007aff;
       align-self: flex-end;
       color: white;
       border-radius: 10px 10px 0 10px;
-      text-align: right;
     }
 
     .bot {
-      background: #565869;
+      background: #3a3b3c;
       align-self: flex-start;
       color: white;
       border-radius: 10px 10px 10px 0;
-      text-align: left;
     }
 
     .input-area {
       display: flex;
-      padding: 10px;
-      background: transparent;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.1);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
       align-items: center;
-      justify-content: center;
     }
 
-    input[type="text"], input[type="file"] {
+    input[type="text"] {
       flex: 1;
-      padding: 10px;
-      border: 2px solid black;
-      border-radius: 5px;
-      background: white;
-      color: black;
+      padding: 10px 14px;
+      border: 2px solid #ccc;
+      border-radius: 6px;
       font-size: 16px;
       outline: none;
+      margin-right: 10px;
     }
 
     button {
-      background: #0a84ff;
+      background: #007aff;
       color: white;
       border: none;
-      padding: 10px 15px;
-      margin-left: 10px;
-      border-radius: 5px;
+      padding: 10px 16px;
+      border-radius: 6px;
       font-size: 16px;
       cursor: pointer;
+      transition: background 0.3s ease;
     }
 
     button:hover {
-      background: #0073e6;
+      background: #005ecb;
     }
 
     button:disabled {
@@ -132,36 +127,19 @@
       cursor: not-allowed;
     }
 
-    /* Styles for upload icon button */
-    .upload-icon {
-      background: #0a84ff;
-      color: white;
-      border: none;
-      padding: 10px;
-      border-radius: 5px;
-      font-size: 18px;
-      cursor: pointer;
-    }
+    @media (max-width: 600px) {
+      .chat-container {
+        height: 95vh;
+      }
 
-    .upload-icon:hover {
-      background: #0073e6;
-    }
+      input[type="text"] {
+        font-size: 14px;
+      }
 
-    .upload-icon:disabled {
-      background-color: #a6c8f2;
-      cursor: not-allowed;
-    }
-
-    .input-area {
-      display: flex;
-      padding: 10px;
-      background: transparent;
-      align-items: center;
-      justify-content: center;
-    }
-
-    input[type="file"] {
-      display: none; /* Hide the file input field */
+      button {
+        font-size: 14px;
+        padding: 8px 12px;
+      }
     }
   </style>
 </head>
@@ -170,16 +148,12 @@
     <div class="chat-header">
       <img src="https://i.ibb.co/3YdpRZs6/IMG-20250402-WA0000-4.png" alt="PERI Logo" class="logo">
     </div>
-    <div class="chat-box" id="chat-box"></div>
+
+    <div class="chat-box" id="chat-box" aria-live="polite"></div>
+
     <div class="input-area">
-      <input type="text" id="user-input" placeholder="Type your message..." autofocus />
-      <button id="send-btn" onclick="sendMessage()">Send</button>
-    </div>
-    <div class="input-area">
-      <label for="pdf-file" class="upload-icon">
-        <i class="fas fa-file-upload"></i> Upload PDF
-      </label>
-      <input type="file" id="pdf-file" />
+      <input type="text" id="user-input" placeholder="Type your message..." aria-label="Message input" />
+      <button id="send-btn" onclick="sendMessage()" aria-label="Send message">Send</button>
     </div>
   </div>
 
@@ -187,7 +161,6 @@
     const chatBox = document.getElementById("chat-box");
     const input = document.getElementById("user-input");
     const sendBtn = document.getElementById("send-btn");
-    const pdfFileInput = document.getElementById("pdf-file");
 
     function appendMessage(sender, message) {
       const msgDiv = document.createElement("div");
@@ -209,9 +182,7 @@
       try {
         const res = await fetch("http://localhost:8000/chat", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message })
         });
 
@@ -219,41 +190,15 @@
         appendMessage("bot", data.response || "⚠️ No response from bot.");
       } catch (error) {
         appendMessage("bot", "❌ Unable to reach server.");
-        console.error("Error:", error);
+        console.error(error);
       } finally {
         sendBtn.disabled = false;
       }
     }
 
-    async function uploadPDF() {
-      const file = pdfFileInput.files[0];
-      if (!file) return;
-
-      const formData = new FormData();
-      formData.append("file", file);
-
-      appendMessage("user", "Uploading PDF...");
-
-      try {
-        const res = await fetch("http://localhost:8000/upload_pdf", {
-          method: "POST",
-          body: formData
-        });
-
-        const data = await res.json();
-        appendMessage("bot", data.response || "⚠️ No response from bot.");
-      } catch (error) {
-        appendMessage("bot", "❌ Unable to upload PDF.");
-        console.error("Error:", error);
-      }
-    }
-
-    input.addEventListener("keydown", function (e) {
+    input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") sendMessage();
     });
-
-    // Event listener for PDF upload
-    pdfFileInput.addEventListener("change", uploadPDF);
   </script>
 </body>
 </html>
