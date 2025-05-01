@@ -5,5 +5,5 @@ requests==2.31.0
 wikipedia==1.4.0
 python-dotenv==1.0.1
 sentence-transformers==2.6.1
-torch
-transformers==4.30.0
+torch>=1.13,<2.2
+transformers>=4.28,<4.32
