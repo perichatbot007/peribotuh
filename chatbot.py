@@ -1,3 +1,4 @@
+
 import os
 import requests
 from dotenv import load_dotenv
@@ -12,8 +13,7 @@ def chat_with_groq(message):
         "Content-Type": "application/json"
     }
     payload = {
-        "model": "llama3-70b-8192"
-        "",  # ✅ Use supported model
+        "model": "llama3-70b-8192",
         "messages": [
             {"role": "system", "content": "You are a helpful chatbot."},
             {"role": "user", "content": message}
