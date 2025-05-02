@@ -1,9 +1,4 @@
-Flask
-Flask-Cors
-spacy
+flask
 requests
-wikipedia
 python-dotenv
-sentence-transformers
-torch
-transformers
+gunicorn
