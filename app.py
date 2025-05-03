@@ -1,18 +1,22 @@
-from flask import Flask, render_template, request, jsonify
-from chatbot import chat_with_groq
+# app.py
+from flask import Flask, request, render_template, jsonify
+from chatbot import Chatbot
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
+bot = Chatbot()
 
 @app.route("/")
-def home():
+def index():
     return render_template("index.html")
 
 @app.route("/chat", methods=["POST"])
 def chat():
     data = request.get_json()
-    user_message = data.get("message", "")
-    bot_reply = chat_with_groq(user_message)
-    return jsonify({"response": bot_reply})
+    user_input = data.get("message", "")
+    response = bot.get_response(user_input)
+    return jsonify({"response": response})
 
 if __name__ == "__main__":
     app.run(debug=True)

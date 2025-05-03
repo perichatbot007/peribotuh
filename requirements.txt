@@ -1,4 +1,8 @@
-flask
+Flask
+Flask-Cors
+spacy
 requests
+wikipedia
 python-dotenv
+sentence-transformers
 gunicorn
