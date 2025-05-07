@@ -2,203 +2,137 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Chatbot UI</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Roboto', sans-serif;
-    }
-
-    body {
-      background: linear-gradient(to bottom left, #ff0033 0%, #cc66ff 100%);
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
-
-    .chat-container {
-      width: 100%;
-      max-width: 600px;
-      height: 90vh;
-      display: flex;
-      flex-direction: column;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(8px);
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
-    }
-
-    .chat-header {
-      padding: 15px;
-      text-align: center;
-      background-color: rgba(0, 0, 0, 0.1);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .logo {
-      height: 50px;
-      width: auto;
-    }
-
-    .chat-box {
-      flex: 1;
-      padding: 15px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      scrollbar-width: none;
-    }
-
-    .chat-box::-webkit-scrollbar {
-      display: none;
-    }
-
-    .message {
-      max-width: 75%;
-      padding: 12px 16px;
-      border-radius: 10px;
-      line-height: 1.5;
-      font-size: 15px;
-      word-wrap: break-word;
-    }
-
-    .user {
-      background: #007aff;
-      align-self: flex-end;
-      color: white;
-      border-radius: 10px 10px 0 10px;
-    }
-
-    .bot {
-      background: #3a3b3c;
-      align-self: flex-start;
-      color: white;
-      border-radius: 10px 10px 10px 0;
-    }
-
-    .input-area {
-      display: flex;
-      padding: 12px;
-      background: rgba(0, 0, 0, 0.1);
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-      align-items: center;
-    }
-
-    input[type="text"] {
-      flex: 1;
-      padding: 10px 14px;
-      border: 2px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
-      outline: none;
-      margin-right: 10px;
-    }
-
-    button {
-      background: #007aff;
-      color: white;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    button:hover {
-      background: #005ecb;
-    }
-
-    button:disabled {
-      background-color: #a6c8f2;
-      cursor: not-allowed;
-    }
-
-    @media (max-width: 600px) {
-      .chat-container {
-        height: 95vh;
-      }
-
-      input[type="text"] {
-        font-size: 14px;
-      }
-
-      button {
-        font-size: 14px;
-        padding: 8px 12px;
-      }
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>PeriChat</title>
+  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/8/86/Perichat_logo2.png" type="image/png">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <div class="chat-container">
-    <div class="chat-header">
-      <img src="https://i.ibb.co/3YdpRZs6/IMG-20250402-WA0000-4.png" alt="PERI Logo" class="logo">
+  <header>
+    <div class="left-side">
+      <span class="material-icons icon" id="menuBtn">menu</span>
+      <img src="https://media-hosting.imagekit.io/c4a9d5b366414862/1000067895-removebg-preview.png" alt="PERI CHAT" class="logo">
     </div>
+    <div class="nav-links" id="navLinks">
+      <a href="#" id="aboutBtn">About</a>
+      <a href="#" id="helpBtn">Help</a>
+      <a href="#" id="headerLoginBtn">Login</a>
+      <a href="#" id="headerSigninBtn">Sign in</a>
+    </div>
+  </header>
 
-    <div class="chat-box" id="chat-box" aria-live="polite"></div>
-
-    <div class="input-area">
-      <input type="text" id="user-input" placeholder="Type your message..." aria-label="Message input" />
-      <button id="send-btn" onclick="sendMessage()" aria-label="Send message">Send</button>
+  <div id="chatSidebar">
+    <div class="sidebar-header">
+      <div id="backBtn" class="backarrow" style="cursor:pointer;">&#8592;</div>
+      <h2>Peri Chat</h2>
+    </div>
+    <div>
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div id="toggleHistoryContainer" style="display: flex; align-items: center; cursor: pointer;">
+          <p style="margin: 0;">History</p>
+        </div>
+        <button id="clearHistoryBtn" style="background: none; border: none; color: #00ffff; cursor: pointer; font-size: 16px;">Clear All</button>
+      </div>
+      <div id="chatHistory" style="margin-top: 10px; display: none;"></div>
+    </div>
+    <div class="bottom-account">
+      <p>👤 Account</p>
     </div>
   </div>
 
-  <script>
-    const chatBox = document.getElementById("chat-box");
-    const input = document.getElementById("user-input");
-    const sendBtn = document.getElementById("send-btn");
+  <section class="main-section active" id="main-content">
+    <h1>What We Do</h1>
+    <p>We offer tools that combine image processing, machine learning,<br> and AI technologies to help you solve problems smarter and faster.</p>
+    <a href="#" class="try-btn" id="tryChatbotBtn">Try Chatbot</a>
+  </section>
 
-    function appendMessage(sender, message) {
-      const msgDiv = document.createElement("div");
-      msgDiv.className = `message ${sender}`;
-      msgDiv.innerText = message;
-      chatBox.appendChild(msgDiv);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
+  <section class="features">
+    <div class="feature-box">
+      <h2>Image Processing</h2>
+      <p>Upload and preview images with real-time processing.<br>Includes examples for various techniques.</p>
+    </div>
+    <div class="feature-box">
+      <h2>AI Technology</h2>
+      <p>Natural Language Processing, Computer Vision,<br>and Automation – all in one place.</p>
+    </div>
+    <div class="feature-box">
+      <h2>Machine Learning</h2>
+      <p>Learns from user interactions and gives smarter,<br>more accurate responses over time.</p>
+    </div>
+  </section>
 
-    async function sendMessage() {
-      const message = input.value.trim();
-      if (!message) return;
+  <section class="about-section" id="about-content">
+    <div class="container">
+      <div class="section"><h1>About</h1><p>PeriChat is a conversational AI with personality...</p></div>
+      <div class="section"><h1>What we do?</h1><p>PeriChat is a conversational AI platform designed...</p></div>
+      <div class="section"><h1>Why we exist?</h1><p>We believe conversation is one of the most human things we do...</p></div>
+      <div class="section"><h1>Our Vision</h1><p>We see a future where AI fits seamlessly into daily life...</p></div>
+      <div class="section"><h1>Our Values</h1><ul><li>Accessibility</li><li>Transparency</li><li>Empathy</li><li>Innovation</li></ul></div>
+      <div class="section" id="helpSection"><h1>Help</h1><p>For more enquiries contact:<br> helpdeskperichat@gmail.com</p></div>
+    </div>
+  </section>
 
-      appendMessage("user", message);
-      input.value = "";
-      input.focus();
-      sendBtn.disabled = true;
+  <footer>
+    <div><h3>Our Research</h3><a href="#">Research index</a><a href="#">Research overview</a><a href="#">Research Residency</a></div>
+    <div><h3>Safety</h3><a href="#">Safety Approach</a><a href="#">Security & Privacy</a></div>
+    <div><h3>Chatbot</h3><a href="#">Explore Chatbot</a><a href="#">Team</a><a href="#">Enterprise</a><a href="#">Download</a><a href="#">Education</a></div>
+    <div><h3>More</h3><a href="#">News</a><a href="#">Stories</a></div>
+  </footer>
 
-      try {
-        const res = await fetch("/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message })
-        });
+  <div class="form-container" id="form-section">
+    <div class="form-content">
+      <span class="material-icons icon" id="formBackBtn" style="position: absolute; top: 20px; left: 20px; cursor: pointer;">arrow_back</span>
+      <div id="login-view" class="form-view active">
+        <h1>Login</h1>
+        <input type="text" class="input-field" id="login-username" placeholder="Username" />
+        <div class="password-container">
+          <input type="password" class="input-field" id="login-password" placeholder="Password" />
+          <button class="toggle-password" onclick="togglePassword('login-password', this)"><i class="fas fa-eye-slash"></i></button>
+        </div>
+        <div id="login-error" class="error"></div>
+        <button class="button" onclick="handleLogin()" id="bd">Login</button>
+        <button class="switch-button" onclick="showSignupForm()">Don't have an account? Sign Up</button>
+      </div>
+      <div id="signup-view" class="form-view">
+        <h1>Create an account</h1>
+        <input type="text" class="input-field" id="signup-name" placeholder="Name">
+        <input type="email" class="input-field" id="signup-email" placeholder="Email">
+        <div class="password-container">
+          <input type="password" class="input-field" id="signup-password" placeholder="Password">
+          <button class="toggle-password" onclick="togglePassword('signup-password', this)"><i class="fas fa-eye-slash"></i></button>
+        </div>
+        <div class="password-container">
+          <input type="password" class="input-field" id="signup-cpass" placeholder="Confirm Password">
+          <div id="password-match-error" class="error" style="margin-left: 120px;"></div>
+          <button class="toggle-password" onclick="togglePassword('signup-cpass', this)"><i class="fas fa-eye-slash"></i></button>
+        </div>
+        <div id="signup-error" class="error"></div>
+        <button class="button" onclick="handleSignup()">Create account</button>
+        <button class="switch-button" onclick="showLoginForm()">Already have an account? Login</button>
+      </div>
+    </div>
+  </div>
 
-        const data = await res.json();
-        appendMessage("bot", data.response || "⚠️ No response from bot.");
-      } catch (error) {
-        appendMessage("bot", "❌ Unable to reach server.");
-        console.error(error);
-      } finally {
-        sendBtn.disabled = false;
-      }
-    }
+  <div class="chat-container" id="chat-section">
+    <img src="https://media-hosting.imagekit.io/c4a9d5b366414862/1000067895-removebg-preview.png" alt="PERI CHAT" class="logo">
+    <span class="material-icons icon" id="menuBtnChat">menu</span>
+    <div class="chat-content">
+      <div class="welcome-message">
+        <h1>Ask me anything!</h1>
+        <p>Welcome to <strong>PERICHAT! 🚀</strong> Where words spark ideas, conversations fuel curiosity and every chat feels like magic! ✨💬</p>
+      </div>
+      <div class="chat-box" id="chatBox"></div>
+    </div>
+    <div class="input-area-container">
+      <div class="input-area">
+        <textarea placeholder="Type a message..." id="chatInput" rows="1"></textarea>
+        <button class="send-button" id="sendBtn">&#x2B06;</button>
+      </div>
+    </div>
+  </div>
 
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") sendMessage();
-    });
-  </script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
